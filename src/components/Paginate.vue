@@ -2,7 +2,7 @@
     <nav aria-label="Page navigation example">
         <ul class="pagination pg-blue justify-content-center">
             <button class="page-link" tabindex="-1" @click="previousPage()">Trước</button>
-            <li @click="chosePage(i.name)" :class="{active: activePage == i.name}" class="page-item" v-for="i in rangPage" :key="i.name">
+            <li @click="chosePage(i.name)" :class="{active: this.pageStore.activePage == i.name}" class="page-item" v-for="i in rangPage" :key="i.name">
                 <button class="page-link" tabindex="-1">{{ i.name }}</button>
             </li>
             <button class="page-link" tabindex="-1" @click="nextPage()">Sau</button>
@@ -11,6 +11,9 @@
 </template>
 
 <script>
+import { mapStores } from "pinia";
+import { usePageStore } from "../stores/page.store";
+
 export default {
     props: {
         // endPage: {
@@ -39,10 +42,13 @@ export default {
         // activePage: function(){
         //     if(this.currentPage == 1) return 1
         // },
-
+        ...mapStores(usePageStore),
         endPage: function () {
             // return Math.min(this.startPage + this.maxPageView - 1, this.totalPage)
-            return Math.min(this.currentPage + this.maxPageView - 1, this.totalPage);
+            // return Math.min(this.currentPage + this.maxPageView - 1, this.totalPage);
+            // alert(this.pageStore.getTotalPage);
+            return Math.min(this.pageStore.getCurrentPage + this.maxPageView - 1, this.pageStore.getTotalPage);
+
         },
 
         startPage: function () {
@@ -63,11 +69,11 @@ export default {
     },
     methods: {
         nextPage(){
-            this.$emit('nextPage',this.activePage)
+            this.$emit('nextPage', this.pageStore.activePage)
         },
         previousPage(){
             // alert(this.activePage)
-            this.$emit('previousPage',this.activePage)
+            this.$emit('previousPage', this.pageStore.activePage)
         },
         chosePage(name){
             // alert("dgsgd")

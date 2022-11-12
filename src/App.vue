@@ -1,5 +1,5 @@
 <template>
-  <Header @getFilmBo="getFilmBo"></Header>
+  <Header></Header>
   <router-view />
 </template>
 
@@ -10,9 +10,7 @@ export default {
     Header,
   },
   methods:{
-    getFilmBo(){
-      this.currentPage  = 5;
-    }
+    
   }
 }
 </script>

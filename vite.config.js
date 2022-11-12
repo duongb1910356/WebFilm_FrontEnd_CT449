@@ -8,8 +8,10 @@ export default defineConfig({
   plugins: [vue()],
   resolve: {
     alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url))
-    }
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
+      'vue$': 'vue/dist/vue.esm.js'
+    },
+    extensions: ['.js', '.vue', '.json', '.css', '.node']
   },
   server: {
     port: 3001,
@@ -24,9 +26,9 @@ export default defineConfig({
 
     /** If you set esmExternals to true, this plugins assumes that 
       all external dependencies are ES modules */
- 
+
     commonjsOptions: {
-       esmExternals: false 
+      esmExternals: true
     },
- }
+  }
 })

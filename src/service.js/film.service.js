@@ -12,6 +12,22 @@ class FilmService{
             }
         })).data;
     }
+
+    async getFilmLe(){
+        return (await this.api.get("/film-le")).data;
+    }
+
+    async getFilmBo(){
+        return (await this.api.get("/film-bo")).data;
+    }
+
+    async getFilmHoatHinh(){
+        return (await this.api.get("/film-hoat-hinh")).data;
+    }
+
+    async getFilFromSlug(slug){
+        return (await this.api.get(`/film/${slug}`)).data;
+    }
 }
 
 export default new FilmService();

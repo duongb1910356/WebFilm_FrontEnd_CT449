@@ -8,7 +8,8 @@
             </button>
             <div class="collapse navbar-collapse justify-content-end" id="navbarID">
                 <div class="navbar-nav">
-                    <a class="nav-link " aria-current="page" href="#">Đăng nhập</a>
+                    <button class="nav-link" aria-current="page" href="#" data-toggle="modal"
+                        data-target="#loginModal">Đăng nhập</button>
                     <a class="nav-link " aria-current="page" href="#">Đăng ký</a>
                 </div>
             </div>
@@ -18,9 +19,12 @@
     <div class="d-flex justify-content-between align-items-center bg-white border my-0 py-0"
         style="border-radius: 3px;">
         <div class="d-flex flex-row">
-            <button @click="getFilmBo()" class="btn p-2 bd-highlight header-link btn-no">Phim bộ</button>
-            <button class="btn p-2 bd-highlight header-link">Phim chiếu rạp</button>
-            <button class="btn p-2 bd-highlight header-link">Hoạt hình</button>
+            <router-link to="/"><button @click="getFilmBo()" class="btn p-2 bd-highlight header-link btn-no">Phim
+                    bộ</button></router-link>
+            <router-link to="/"><button @click="getFilmLe()" class="btn p-2 bd-highlight header-link">Phim lẻ</button>
+            </router-link>
+            <router-link to="/"><button @click="getFilmHoatHinh()" class="btn p-2 bd-highlight header-link">Hoạt
+                    hình</button></router-link>
         </div>
         <div class="">
             <form action="" class="input-wrapper">
@@ -29,15 +33,81 @@
             </form>
         </div>
     </div>
+
+
+    <div id="app">
+        <div v-if="showModal">
+            <transition name="modal fade">
+                <div class="modal-mask">
+                    <div class="modal-wrapper">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Modal title</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true" @click="showModal = false">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <p>Modal body text goes here.</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary"
+                                        @click="showModal = false">Close</button>
+                                    <button type="button" class="btn btn-primary">Save changes</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </transition>
+        </div>
+    </div>
+    <button @click="showModal = true">Click</button>
+
+
+
+
 </template>
 
 <script>
+import { mapStores } from "pinia";
+import { useFilmStore } from "../stores/films";
+import { usePageStore } from "../stores/page.store";
+import filmService from "../service.js/film.service";
+
 export default {
+
     inheritAttrs: false,
+    data() {
+        return {showModal: false}
+    },
+    computed: {
+        ...mapStores(useFilmStore, usePageStore)
+    },
     methods: {
-        getFilmBo() {
-            // alert("sdgg")
-            this.$emit('getFilmBo',);
+        async getFilmBo() {
+            await this.filmStore.fetchFilmBo();
+            this.pageStore.currentPage = 1;
+            this.pageStore.totalPage = this.filmStore.totalPage;
+            this.filmStore.page = 1;
+            this.pageStore.activePage = 1;
+        },
+
+        async getFilmLe() {
+            await this.filmStore.fetchFilmLe();
+            this.pageStore.currentPage = 1;
+            this.pageStore.totalPage = this.filmStore.totalPage;
+            this.filmStore.page = 1;
+            this.pageStore.activePage = 1;
+        },
+
+        async getFilmHoatHinh() {
+            await this.filmStore.fetchFilmHoatHinh();
+            this.pageStore.currentPage = 1;
+            this.pageStore.totalPage = this.filmStore.totalPage;
+            this.filmStore.page = 1;
+            this.pageStore.activePage = 1;
         }
     }
 
