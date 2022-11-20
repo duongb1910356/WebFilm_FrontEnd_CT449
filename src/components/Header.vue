@@ -1,16 +1,17 @@
 <template>
     <nav class="navbar navbar-expand-sm navbar-dark">
         <div class="container-fluid" style="padding: 0px 0px;">
-            <a class="navbar-brand text" href="#">FILMCHUA</a>
+            <a class="navbar-brand text" href="/">FILMCHUA</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarID"
                 aria-controls="navbarID" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse justify-content-end" id="navbarID">
                 <div class="navbar-nav">
-                    <button class="nav-link" aria-current="page" href="#" data-toggle="modal"
-                        data-target="#loginModal">Đăng nhập</button>
-                    <a class="nav-link " aria-current="page" href="#">Đăng ký</a>
+                    <ul class="d-flex flex-row">
+                        <li class="nav-link" aria-current="page" @click="openModalLogin()" v-text="username"></li>
+                        <li class="nav-link " aria-current="page" @click="openModalRegister()">Đăng ký</li>
+                    </ul>
                 </div>
             </div>
         </div>
@@ -19,54 +20,21 @@
     <div class="d-flex justify-content-between align-items-center bg-white border my-0 py-0"
         style="border-radius: 3px;">
         <div class="d-flex flex-row">
-            <router-link to="/"><button @click="getFilmBo()" class="btn p-2 bd-highlight header-link btn-no">Phim
+            <router-link to="/result"><button @click="getFilmBo()" class="btn p-2 bd-highlight header-link btn-no">Phim
                     bộ</button></router-link>
-            <router-link to="/"><button @click="getFilmLe()" class="btn p-2 bd-highlight header-link">Phim lẻ</button>
+            <router-link to="/result"><button @click="getFilmLe()" class="btn p-2 bd-highlight header-link">Phim lẻ</button>
             </router-link>
-            <router-link to="/"><button @click="getFilmHoatHinh()" class="btn p-2 bd-highlight header-link">Hoạt
+            <router-link to="/result"><button @click="getFilmHoatHinh()" class="btn p-2 bd-highlight header-link">Hoạt
                     hình</button></router-link>
         </div>
         <div class="">
-            <form action="" class="input-wrapper">
-                <input type="text" name="" class="search-bar border-0" id="" style="width: 250px;">
+            <form class="input-wrapper" @submit.prevent="submitSearch()">
+                <input v-model="inputsearch" class="search-bar border-0"  style="width: 250px;">
                 <!-- <i class="fa-solid fa-magnifying-glass"></i> -->
+                <!-- <button @click="submitSearch()">ci</button> -->
             </form>
         </div>
     </div>
-
-
-    <div id="app">
-        <div v-if="showModal">
-            <transition name="modal fade">
-                <div class="modal-mask">
-                    <div class="modal-wrapper">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title">Modal title</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true" @click="showModal = false">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    <p>Modal body text goes here.</p>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary"
-                                        @click="showModal = false">Close</button>
-                                    <button type="button" class="btn btn-primary">Save changes</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </transition>
-        </div>
-    </div>
-    <button @click="showModal = true">Click</button>
-
-
-
 
 </template>
 
@@ -77,11 +45,17 @@ import { usePageStore } from "../stores/page.store";
 import filmService from "../service.js/film.service";
 
 export default {
-
+    // components:{
+    //     Modal
+    // },
     inheritAttrs: false,
-    data() {
-        return {showModal: false}
+    
+    props: {
+        username: { type: String, required: false, default: "Đăng nhập" }
     },
+    // data() {
+    //     return { showModal: false ,visibleLiveDemo: true}
+    // },
     computed: {
         ...mapStores(useFilmStore, usePageStore)
     },
@@ -108,6 +82,23 @@ export default {
             this.pageStore.totalPage = this.filmStore.totalPage;
             this.filmStore.page = 1;
             this.pageStore.activePage = 1;
+        },
+
+        openModalLogin(){
+            this.$emit("openModalLogin");
+        },
+
+        openModalRegister(){
+            this.$emit("openModalRegister");
+        },
+
+        async submitSearch(){
+            await this.filmStore.fetchFromSearchBox(this.inputsearch);
+            this.pageStore.currentPage = 1;
+            this.pageStore.totalPage = this.filmStore.totalPage;
+            this.filmStore.page = 1;
+            this.pageStore.activePage = 1;
+            this.$router.push('/result')
         }
     }
 

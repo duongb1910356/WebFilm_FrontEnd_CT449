@@ -69,11 +69,11 @@ export default {
             alert(this.filmStore.getFilms);
         },
 
-        async showNewFilm(page = 1) {
-            await this.filmStore.fetchFilmMoi();
-            this.pageStore.totalPage = this.filmStore.totalPage;
-            // this.films = this.filmStore.getFilms;
-        },
+        // async showNewFilm(page = 1) {
+        //     await this.filmStore.fetchFilmMoi();
+        //     this.pageStore.totalPage = this.filmStore.totalPage;
+        //     // this.films = this.filmStore.getFilms;
+        // },
     },
     created() {
         // alert(this.filmStore.films)
@@ -81,10 +81,11 @@ export default {
         //     this.showNewFilm(1)
 
         // }
-    },
-    mounted() {
-        this.showNewFilm(1)
     }
+    //    ,
+    // mounted() {
+    //     this.showNewFilm(1)
+    // }
 }
 </script>
 

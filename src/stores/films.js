@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import filmService from "../service.js/film.service";
-const maxFilmOnPage = 8;
+const maxFilmOnPage = 12;
 export const useFilmStore = defineStore("film",{
     state: () => ({
         films: [],
@@ -48,6 +48,16 @@ export const useFilmStore = defineStore("film",{
                 this.films = await filmService.getFilmHoatHinh();
                 this.totalPage = Math.floor((this.films.length + maxFilmOnPage - 1) / maxFilmOnPage);
                 this.title = "Phim hoạt hình"
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        async fetchFromSearchBox(name){
+            try {
+                this.films = await filmService.getFilmFromSearchBox(name);
+                this.totalPage = Math.floor((this.films.length + maxFilmOnPage - 1) / maxFilmOnPage);
+                this.title = "Kết quả"
             } catch (error) {
                 console.log(error);
             }
