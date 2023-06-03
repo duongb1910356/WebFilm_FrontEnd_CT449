@@ -1,5 +1,5 @@
 <template>
-    <h1>Thiết kế trang hiển thị danh sách các film</h1>
+    <h1>Thiết kế trang chỉnh sửa film</h1>
 </template>
 
 <script>
